@@ -1,6 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Web3 from "web3";
+import { abi } from "../../abi";
+import { SetUser } from "../../redux/userSlice";
 
 function Home() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.userReducer);
+
+  window.ethereum &&
+    window.ethereum.on("accountsChanged", async (account) => {
+      if (account.length === 0) {
+        navigate("/connectWallet");
+        localStorage.removeItem("userAddress");
+        dispatch(SetUser(null));
+      }
+      // const web3 = new Web3(window.ethereum);
+      // const contract = new web3.eth.Contract(
+      //   abi,
+      //   "0xc0390304E63268998a8E60529cCc49818b012e0e"
+      // );
+      // const userId = window.ethereum
+      //   ? await contract.methods.sellerAddressToSellerId(account).call()
+      //   : "";
+      // dispatch(SetUser(userId));
+    });
+
+  const getAccount = async () => {
+    dispatch(SetUser(localStorage.getItem("userAddress")));
+  };
+
+  useEffect(() => {
+    if (!localStorage.getItem("userAddress")) {
+      navigate("/connectWallet");
+      return;
+    }
+
+    getAccount();
+  }, []);
+
   return (
     <div className="h-screen bg-gray-300 flex flex-col">
       <div className="w-full bg-teal-500 p-6 text-right text-white">
@@ -22,9 +62,7 @@ function Home() {
             <h1 className="text-3xl font-bold text-teal-500 mb-6">
               Welcome to Home
             </h1>
-            <p className="text-gray-700">
-              This is a sample home page built with React and Tailwind CSS.
-            </p>
+            <p className="text-gray-700">{user ? user.id : "No user"}</p>
           </div>
         </div>
       </div>
