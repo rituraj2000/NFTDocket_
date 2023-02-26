@@ -17,15 +17,6 @@ function Home() {
         localStorage.removeItem("userAddress");
         dispatch(SetUser(null));
       }
-      // const web3 = new Web3(window.ethereum);
-      // const contract = new web3.eth.Contract(
-      //   abi,
-      //   "0xc0390304E63268998a8E60529cCc49818b012e0e"
-      // );
-      // const userId = window.ethereum
-      //   ? await contract.methods.sellerAddressToSellerId(account).call()
-      //   : "";
-      // dispatch(SetUser(userId));
     });
 
   const getAccount = async () => {
