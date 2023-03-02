@@ -4,6 +4,7 @@ import { SetUser } from "../../redux/userSlice";
 import { abi } from "../../abi";
 import { useNavigate } from "react-router-dom";
 import hand from "../../resources/hand.png";
+import Web3 from "web3";
 
 const ConnectToWallet = () => {
   const dispatch = useDispatch();
@@ -25,33 +26,47 @@ const ConnectToWallet = () => {
   //     dispatch(SetUser(userId));
   //   });
 
+  //---Check User is Registered or Not
+  const checkRegistration = async (currentAccount) => {
+    const web3 = new Web3(window.ethereum);
+    const contract = new web3.eth.Contract(
+      abi,
+      "0x789e930bAfa553938169A0f162339722A219cA74"
+    );
+    const regStatus = await contract.methods
+      .isSellerRegistered(currentAccount)
+      .call();
+
+    if (regStatus === true) {
+      navigate("/");
+    } else {
+      navigate("/register");
+    }
+  };
+
   const connectToWallet = async () => {
+    //---Connect to current account
     const accounts = await window.ethereum.request({
       method: "eth_requestAccounts",
     });
-    dispatch(SetUser(accounts[0]));
+    const currentAccount = accounts[0];
+    dispatch(SetUser(currentAccount));
     localStorage.setItem("userAddress", accounts[0]);
-    navigate("/");
+
+    //---Check if the user is registered as a Seller
+    await checkRegistration(currentAccount);
   };
 
   useEffect(() => {
     if (localStorage.getItem("userAddress")) {
-      navigate("/");
+      checkRegistration(localStorage.getItem("userAddress"));
     }
   }, []);
 
   return (
     <div className="flex flex-col h-screen">
-      <div className=" w-full flex px-10 h-1/5 justify-end">
-        <button
-          className="bg-gradient-to-r from-indigo-500 to-blue-800 hover:bg-blue-700 text-white font-medium py-2 px-14 rounded-2xl shadow-2xl my-8  text-base"
-          onClick={connectToWallet}
-        >
-          +ConnectToWallet
-        </button>
-      </div>
       <div
-        className="flex justify-center bg-cover h-4/5"
+        className="flex justify-center bg-cover h-full"
         style={{
           backgroundImage: "url('https://www.linkpicture.com/q/bg_51.png')",
         }}
@@ -68,20 +83,14 @@ const ConnectToWallet = () => {
               reliable platform. With an easy-to-use interface, NFT owners can
               confidently protect their assets.
             </p>
-            <div className="flex">
-              <button
-                className="bg-gradient-to-r from-indigo-500 to-blue-800 hover:bg-blue-700 text-white font-medium py-4 px-14 rounded-2xl shadow-2xl my-8  text-base"
-                onClick={() => {}}
-              >
-                Register as Seller
-              </button>
-              <button
-                className="bg-gradient-to-r from-red-600 to-yellow-600 hover:bg-blue-700 text-white font-medium py-4 px-14  mx-10 rounded-2xl shadow-2xl my-8  text-base"
-                onClick={() => {}}
-              >
-                Customer
-              </button>
-            </div>
+
+            {/* Connect To Wallet Button */}
+            <button
+              className="bg-gradient-to-r from-indigo-500 to-blue-800 hover:bg-blue-700 text-white font-medium py-7 px-14 rounded-2xl shadow-2xl my-8  text-base"
+              onClick={connectToWallet}
+            >
+              +ConnectToWallet
+            </button>
           </div>
         </div>
 

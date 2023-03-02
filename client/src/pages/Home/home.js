@@ -33,27 +33,58 @@ function Home() {
   }, []);
 
   return (
-    <div className="h-screen bg-gray-300 flex flex-col">
-      <div className="w-full bg-teal-500 p-6 text-right text-white">
-        <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
-          Logout
-        </button>
-      </div>
-      <div className="flex-1 flex">
-        <div className="w-1/4 bg-teal-500 h-full flex flex-col items-center justify-center p-6 text-white">
-          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-6">
-            Create new warranty
+    <div
+      className="h-screen bg-gray-300 flex bg-contain"
+      style={{
+        backgroundImage:
+          "url('https://www.linkpicture.com/q/dashboard_BG.png')",
+      }}
+    >
+      {/* Dashboard Control */}
+      <div className=" w-2/12 h-screen px-6 py-9">
+        <div className=" flex flex-col w-full h-full bg-gradient-to-b from-sexy-black-light to-sexy-black rounded-xl shadow-lg p-4 truncate">
+          {/* Create New Warranty */}
+          <button className=" mt-6 bg-gradient-to-b from-blue-600 to-blue-800 text-xs text-white px-3 py-2 rounded-md shadow-2xl">
+            +Create New Warranty
           </button>
-          <button className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">
-            Previous Warranties
-          </button>
+
+          {/* Warranty Selection Buttons */}
+          <div className=" text-white uppercase text-xs  mt-10 mb-10 flex flex-col text-left">
+            <div className="flex">
+              <div className=" w-20 h-20 border-2 border-gray-600 px-2 py-2 m-1 text-xs text-center rounded-md border-dashed text-gray-500">
+                <button>Pending</button>
+              </div>
+              <div className=" w-20 h-20 border-2 border-gray-600 px-2 py-2 m-1 text-xs text-center rounded-md border-dashed text-gray-500">
+                <button>Expired</button>
+              </div>
+            </div>
+            <div className=" w-20 h-20 border-2 border-gray-200 px-2 py-2 m-1 text-xs text-center rounded-md border-dashed bg-gray-400 text-gray-300">
+              <button>Active</button>
+            </div>
+          </div>
+
+          {/* Logout Button */}
+          <button className="mt-auto mx-2 mb-3 text-gray-600">Logout</button>
         </div>
-        <div className="w-3/4 h-full flex items-center justify-center">
-          <div className="text-center">
-            <h1 className="text-3xl font-bold text-teal-500 mb-6">
-              Welcome to Home
-            </h1>
-            <p className="text-gray-700">{user ? user.id : "No user"}</p>
+      </div>
+
+      {/* Dashboard */}
+      <div className="flex flex-col w-10/12 h-full p-6">
+        <div className="w-full text-right text-lg font-semibold text-gray-600 px-4">
+          Hey {user.id}
+        </div>
+        <div className=" text-2xl font-normal text-gray-600">Dashboard</div>
+        <div className=" h-full my-3">
+          <div className="flex h-full w-full bg-blue-200 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-gray-100">
+            <div className=" w-2/5 h-24 border-b-2 border-gray-100  pt-10 text-center">
+              Customer
+            </div>
+            <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center">
+              Status
+            </div>
+            <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center">
+              Token Address
+            </div>
           </div>
         </div>
       </div>

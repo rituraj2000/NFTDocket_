@@ -15,6 +15,8 @@ module.exports = {
         "3xl": "5rem",
       },
       colors: {
+        "sexy-black-light": "#3D323D",
+        "sexy-black": "#1D1C22",
         "regal-blue": "#243c5a",
         primary: "#5680E9",
         new: "#232946",
@@ -36,5 +38,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/aspect-ratio")],
 };
