@@ -5,7 +5,7 @@ import Web3 from "web3";
 import { abi } from "../../abi";
 import { SetUser } from "../../redux/userSlice";
 
-function Home() {
+function SellerDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
@@ -21,6 +21,11 @@ function Home() {
 
   const getAccount = async () => {
     dispatch(SetUser(localStorage.getItem("userAddress")));
+  };
+
+  // Create New NFT
+  const createNFT = () => {
+    navigate("/create-nft");
   };
 
   useEffect(() => {
@@ -44,7 +49,10 @@ function Home() {
       <div className=" w-2/12 h-screen px-6 py-9">
         <div className=" flex flex-col w-full h-full bg-gradient-to-b from-sexy-black-light to-sexy-black rounded-xl shadow-lg p-4 truncate">
           {/* Create New Warranty */}
-          <button className=" mt-6 bg-gradient-to-b from-blue-600 to-blue-800 text-xs text-white px-3 py-2 rounded-md shadow-2xl">
+          <button
+            className=" mt-6 bg-gradient-to-b from-blue-600 to-blue-800 text-xs text-white px-3 py-2 rounded-md shadow-2xl"
+            onClick={createNFT}
+          >
             +Create New Warranty
           </button>
 
@@ -92,4 +100,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default SellerDashboard;
