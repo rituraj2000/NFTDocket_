@@ -4,11 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import Web3 from "web3";
 import { abi } from "../../abi";
 import { SetUser } from "../../redux/userSlice";
+import { contract } from "../../web3_utils/contract";
+import { getSellerNfts } from "../../apiCalls/Seller/sellerApiCall";
 
 function SellerDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
+  const [nfts, setNfts] = useState([]);
 
   window.ethereum &&
     window.ethereum.on("accountsChanged", async (account) => {
@@ -28,14 +31,24 @@ function SellerDashboard() {
     navigate("/create-nft");
   };
 
+  //Get All Seller Nfts
+  const getnftsdetails = async () => {
+    const res = await getSellerNfts(user.id, contract);
+    console.log(res);
+  };
+
   useEffect(() => {
     if (!localStorage.getItem("userAddress")) {
       navigate("/connectWallet");
       return;
     }
 
+    //Set the current user in the State
     getAccount();
-  }, []);
+
+    //Get Seller NFTs
+    getnftsdetails();
+  }, [user]);
 
   return (
     <div
@@ -83,15 +96,31 @@ function SellerDashboard() {
         </div>
         <div className=" text-2xl font-normal text-gray-600">Dashboard</div>
         <div className=" h-full my-3">
-          <div className="flex h-full w-full bg-blue-200 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-gray-100">
-            <div className=" w-2/5 h-24 border-b-2 border-gray-100  pt-10 text-center">
-              Customer
+          <div className="flex flex-col h-full w-full bg-blue-200 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-gray-100">
+            {/* Headings */}
+            <div className="flex w-full">
+              <div className=" w-2/5 h-24 border-b-2 border-gray-100  pt-10 text-center">
+                Customer
+              </div>
+              <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center">
+                Status
+              </div>
+              <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center">
+                Token id
+              </div>
             </div>
-            <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center">
-              Status
-            </div>
-            <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center">
-              Token Address
+
+            {/* Warranty Details*/}
+            <div className="flex w-full">
+              <div className=" w-2/5 h-24 border-b-2 border-gray-100  text-xs pt-10 text-center">
+                0x21f7f174d21CA68a7a38e8291e4F21921FF6C049
+              </div>
+              <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center text-blue-700">
+                pending
+              </div>
+              <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center">
+                2344
+              </div>
             </div>
           </div>
         </div>

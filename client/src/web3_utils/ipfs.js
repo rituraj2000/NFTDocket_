@@ -1,5 +1,18 @@
 const ipfs = require("ipfs-http-client");
+const projectId = "277J4qfFtNMoU4VjPgwkSC7agwj";
+const projectSecret = "25dbbdefd169318ba0dd5d82708f080a";
 
-const client = ipfs.create();
+const auth =
+  "Basic " + Buffer.from(projectId + ":" + projectSecret).toString("base64");
+
+const client = ipfs.create({
+  host: "ipfs.infura.io",
+  port: 5001,
+  protocol: "https",
+  headers: {
+    authorization: auth,
+  },
+  apiPath: "/api/v0",
+});
 
 export default client;
