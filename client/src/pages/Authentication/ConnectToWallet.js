@@ -5,6 +5,7 @@ import { abi } from "../../abi";
 import { useNavigate } from "react-router-dom";
 import hand from "../../resources/hand.png";
 import Web3 from "web3";
+import { contract } from "../../web3_utils/contract";
 
 const ConnectToWallet = () => {
   const dispatch = useDispatch();
@@ -28,11 +29,6 @@ const ConnectToWallet = () => {
 
   //---Check User is Registered or Not
   const checkRegistration = async (currentAccount) => {
-    const web3 = new Web3(window.ethereum);
-    const contract = new web3.eth.Contract(
-      abi,
-      "0x789e930bAfa553938169A0f162339722A219cA74"
-    );
     const regStatus = await contract.methods
       .isSellerRegistered(currentAccount)
       .call();

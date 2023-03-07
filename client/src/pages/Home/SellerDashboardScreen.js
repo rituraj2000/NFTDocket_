@@ -6,12 +6,16 @@ import { abi } from "../../abi";
 import { SetUser } from "../../redux/userSlice";
 import { contract } from "../../web3_utils/contract";
 import { getSellerNfts } from "../../apiCalls/Seller/sellerApiCall";
+import PendingWarrantiesDetailsWidget from "./Seller/components/PendingWarrantiesDetails";
+import ActiveWarrantiesDetailsWidget from "./Seller/components/ActiveWarrantyStatusWidget";
+import ExpiredWarrantiesDetailsWidget from "./Seller/components/ExpiredWarrantyStatusWidget";
 
 function SellerDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
   const [nfts, setNfts] = useState([]);
+  const [nftStatus, setNftStatus] = useState("1");
 
   window.ethereum &&
     window.ethereum.on("accountsChanged", async (account) => {
@@ -26,6 +30,15 @@ function SellerDashboard() {
     dispatch(SetUser(localStorage.getItem("userAddress")));
   };
 
+  //Check for Registration
+  const checkRegistrationStatus = async (user) => {
+    const regStatus = await contract.methods.isSellerRegistered(user).call();
+    if (regStatus == false) {
+      navigate("/register");
+      return;
+    }
+  };
+
   // Create New NFT
   const createNFT = () => {
     navigate("/create-nft");
@@ -33,15 +46,18 @@ function SellerDashboard() {
 
   //Get All Seller Nfts
   const getnftsdetails = async () => {
-    const res = await getSellerNfts(user.id, contract);
-    console.log(res);
+    const nfts = await getSellerNfts(user.id, contract);
+    setNfts(nfts);
   };
 
   useEffect(() => {
+    //Check if the User is Registered as a Seller
     if (!localStorage.getItem("userAddress")) {
       navigate("/connectWallet");
       return;
     }
+
+    checkRegistrationStatus(localStorage.getItem("userAddress"));
 
     //Set the current user in the State
     getAccount();
@@ -73,14 +89,32 @@ function SellerDashboard() {
           <div className=" text-white uppercase text-xs  mt-10 mb-10 flex flex-col text-left">
             <div className="flex">
               <div className=" w-20 h-20 border-2 border-gray-600 px-2 py-2 m-1 text-xs text-center rounded-md border-dashed text-gray-500">
-                <button>Pending</button>
+                <button
+                  onClick={() => {
+                    setNftStatus("2");
+                  }}
+                >
+                  Pending
+                </button>
               </div>
               <div className=" w-20 h-20 border-2 border-gray-600 px-2 py-2 m-1 text-xs text-center rounded-md border-dashed text-gray-500">
-                <button>Expired</button>
+                <button
+                  onClick={() => {
+                    setNftStatus("3");
+                  }}
+                >
+                  Expired
+                </button>
               </div>
             </div>
             <div className=" w-20 h-20 border-2 border-gray-200 px-2 py-2 m-1 text-xs text-center rounded-md border-dashed bg-gray-400 text-gray-300">
-              <button>Active</button>
+              <button
+                onClick={() => {
+                  setNftStatus("1");
+                }}
+              >
+                Active
+              </button>
             </div>
           </div>
 
@@ -98,30 +132,54 @@ function SellerDashboard() {
         <div className=" h-full my-3">
           <div className="flex flex-col h-full w-full bg-blue-200 rounded-xl bg-clip-padding backdrop-filter backdrop-blur-xl bg-opacity-60 border border-gray-100">
             {/* Headings */}
-            <div className="flex w-full">
-              <div className=" w-2/5 h-24 border-b-2 border-gray-100  pt-10 text-center">
-                Customer
+            {(nftStatus === "2" || nftStatus === "3") && (
+              <div className="flex w-full">
+                <div className=" w-2/5 h-24 border-b-2 border-gray-100  pt-10 text-center">
+                  Customer
+                </div>
+                <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center">
+                  Status
+                </div>
+                <div className=" w-2/5 h-24 pt-10 border-b-2 border-r-2 border-gray-100 text-center">
+                  Token id
+                </div>
               </div>
-              <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center">
-                Status
+            )}
+            {nftStatus === "1" && (
+              <div className="flex w-full">
+                <div className=" w-2/5 h-24 border-b-2 border-gray-100  pt-10 text-center">
+                  Customer
+                </div>
+                <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center">
+                  Status
+                </div>
+                <div className=" w-2/5 h-24 pt-10 border-b-2 border-r-2 border-gray-100 text-center">
+                  Token id
+                </div>
+                <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center">
+                  Token id
+                </div>
               </div>
-              <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center">
-                Token id
-              </div>
-            </div>
+            )}
 
             {/* Warranty Details*/}
-            <div className="flex w-full">
-              <div className=" w-2/5 h-24 border-b-2 border-gray-100  text-xs pt-10 text-center">
-                0x21f7f174d21CA68a7a38e8291e4F21921FF6C049
-              </div>
-              <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center text-blue-700">
-                pending
-              </div>
-              <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center">
-                2344
-              </div>
-            </div>
+            {nftStatus === "2" &&
+              nfts &&
+              nfts.map((warranty) => (
+                <PendingWarrantiesDetailsWidget warranty={warranty} />
+              ))}
+
+            {nftStatus === "1" &&
+              nfts &&
+              nfts.map((warranty) => (
+                <ActiveWarrantiesDetailsWidget warranty={warranty} />
+              ))}
+
+            {nftStatus === "3" &&
+              nfts &&
+              nfts.map((warranty) => (
+                <ExpiredWarrantiesDetailsWidget warranty={warranty} />
+              ))}
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import SignUp from "./pages/Authentication/SignUpForm";
 import Register from "./pages/Authentication/RegisterationScreen";
-import Home from "./pages/Home/home";
+import SellerDashboard from "./pages/Home/SellerDashboardScreen";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ConnectToWallet from "./pages/Authentication/ConnectToWallet";
 import Web3 from "web3";
@@ -15,7 +15,7 @@ const App = () => {
       <BrowserRouter>
         <Routes>
           {/* TODO : Rewrite this */}
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<SellerDashboard />} />
           <Route path="/create-nft" element={<CreateNFTScreen />} />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/register" element={<Register />} />

@@ -1,5 +1,3 @@
-// import { contract } from "../../web3_utils/contract";
-
 export const createNft = async (
   customerAddr,
   tokenId,
@@ -27,6 +25,10 @@ export const createNft = async (
 };
 
 export const getSellerNfts = async (seller, contract) => {
-  const res = await contract.methods.getAllSellerNfts(seller).call();
-  return res;
+  try {
+    const res = await contract.methods.getAllSellerNfts(seller).call();
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
 };

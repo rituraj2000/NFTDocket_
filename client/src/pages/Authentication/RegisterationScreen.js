@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
 import { abi } from "../../abi";
+import { contract } from "../../web3_utils/contract";
 
 const Register = () => {
   const dispatch = useDispatch();
@@ -11,12 +12,6 @@ const Register = () => {
 
   const registerSeller = async () => {
     const currentAddress = localStorage.getItem("userAddress");
-    const web3 = new Web3(window.ethereum);
-    const contract = new web3.eth.Contract(
-      abi,
-      "0xA8885b8776a1e9d60138B0197FA56833aa02D7F2"
-    );
-
     await contract.methods
       .registerSeller(currentAddress)
       .send({ from: currentAddress })
@@ -24,6 +19,14 @@ const Register = () => {
 
     navigate("/");
   };
+
+  useState(() => {
+    const user = localStorage.getItem("userAddress");
+    if (!user) {
+      navigate("/connectWallet");
+      return;
+    }
+  }, []);
 
   return (
     <div
