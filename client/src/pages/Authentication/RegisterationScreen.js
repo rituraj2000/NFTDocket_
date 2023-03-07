@@ -20,12 +20,26 @@ const Register = () => {
     navigate("/");
   };
 
+  //Check Registratin Status
+  const checkRegistration = async (currentAccount) => {
+    const regStatus = await contract.methods
+      .isSellerRegistered(currentAccount)
+      .call();
+
+    if (regStatus === true) {
+      navigate("/");
+      return;
+    }
+  };
+
   useState(() => {
     const user = localStorage.getItem("userAddress");
-    if (!user) {
+    if (!localStorage.getItem("userAddress")) {
       navigate("/connectWallet");
       return;
     }
+
+    checkRegistration(user);
   }, []);
 
   return (
@@ -53,7 +67,9 @@ const Register = () => {
           <h1 className=" text-2xl text-blue-600">Customer</h1>
           <button
             className="bg-gradient-to-r from-indigo-500 to-blue-800 hover:bg-blue-700 text-white font-medium py-7 px-14 shadow-2xl my-2 text-base"
-            onClick={() => {}}
+            onClick={() => {
+              navigate("/customerDashboard");
+            }}
           >
             continue as Customer
           </button>

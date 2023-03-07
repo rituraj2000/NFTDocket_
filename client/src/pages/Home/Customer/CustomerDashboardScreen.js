@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Web3 from "web3";
-import { abi } from "../../abi";
-import { SetUser } from "../../redux/userSlice";
-import { contract } from "../../web3_utils/contract";
-import { getSellerNfts } from "../../apiCalls/Seller/sellerApiCall";
-import PendingWarrantiesDetailsWidget from "./Seller/components/PendingWarrantiesDetails";
-import ActiveWarrantiesDetailsWidget from "./Seller/components/ActiveWarrantyStatusWidget";
-import ExpiredWarrantiesDetailsWidget from "./Seller/components/ExpiredWarrantyStatusWidget";
+import { SetUser } from "../../../redux/userSlice";
+import { contract } from "../../../web3_utils/contract";
+import { getSellerNfts } from "../../../apiCalls/Seller/sellerApiCall";
+import PendingWarrantiesDetailsWidget from "../Seller/components/PendingWarrantiesDetails";
+import ActiveWarrantiesDetailsWidget from "../Seller/components/ActiveWarrantyStatusWidget";
+import ExpiredWarrantiesDetailsWidget from "../Seller/components/ExpiredWarrantyStatusWidget";
+import CustomerPendingWarrantiesDetailsWidget from "./components/CustomerPendingWarranties";
 
-function SellerDashboard() {
+function CustomerDashboard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.userReducer);
@@ -26,22 +26,9 @@ function SellerDashboard() {
       }
     });
 
+  //Set the User State
   const getAccount = async () => {
     dispatch(SetUser(localStorage.getItem("userAddress")));
-  };
-
-  //Check for Registration
-  const checkRegistrationStatus = async (user) => {
-    const regStatus = await contract.methods.isSellerRegistered(user).call();
-    if (regStatus == false) {
-      navigate("/register");
-      return;
-    }
-  };
-
-  // Create New NFT
-  const createNFT = () => {
-    navigate("/create-nft");
   };
 
   //Get All Seller Nfts
@@ -57,12 +44,10 @@ function SellerDashboard() {
       return;
     }
 
-    checkRegistrationStatus(localStorage.getItem("userAddress"));
-
     //Set the current user in the State
     getAccount();
 
-    //Get Seller NFTs
+    //Get the NFTs of the current User
     getnftsdetails();
   }, [user]);
 
@@ -77,16 +62,8 @@ function SellerDashboard() {
       {/* Dashboard Control */}
       <div className=" w-2/12 h-screen px-6 py-9">
         <div className=" flex flex-col w-full h-full bg-gradient-to-b from-sexy-black-light to-sexy-black rounded-xl shadow-lg p-4 truncate">
-          {/* Create New Warranty */}
-          <button
-            className=" mt-6 bg-gradient-to-b from-blue-600 to-blue-800 text-xs text-white px-3 py-2 rounded-md shadow-2xl"
-            onClick={createNFT}
-          >
-            +Create New Warranty
-          </button>
-
           {/* Warranty Selection Buttons */}
-          <div className=" text-white uppercase text-xs  mt-10 mb-10 flex flex-col text-left">
+          <div className=" text-white uppercase text-xs mt-5 mb-10 flex flex-col text-left">
             <div className="flex">
               <div className=" w-20 h-20 border-2 border-gray-600 px-2 py-2 m-1 text-xs text-center rounded-md border-dashed text-gray-500">
                 <button
@@ -166,7 +143,7 @@ function SellerDashboard() {
             {nftStatus === "2" &&
               nfts &&
               nfts.map((warranty) => (
-                <PendingWarrantiesDetailsWidget warranty={warranty} />
+                <CustomerPendingWarrantiesDetailsWidget warranty={warranty} />
               ))}
 
             {nftStatus === "1" &&
@@ -187,4 +164,4 @@ function SellerDashboard() {
   );
 }
 
-export default SellerDashboard;
+export default CustomerDashboard;
