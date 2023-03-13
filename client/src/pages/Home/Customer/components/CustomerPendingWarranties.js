@@ -1,3 +1,6 @@
+import { claim_And_MintNft } from "../../../../apiCalls/Customer/customerApiCall";
+import { contract } from "../../../../web3_utils/contract";
+
 const getStatus = (statusNumber) => {
   if (statusNumber === "0") {
     return "Verified";
@@ -10,15 +13,30 @@ const getStatus = (statusNumber) => {
   }
 };
 
+//Claim And Mint NFT
+const handleClaimOnClick = async (tokenId, sender, contract) => {
+  // console.log({ tokenId, sender, contract });
+  const res = await claim_And_MintNft(tokenId, sender, contract);
+};
+
 const CustomerPendingWarrantiesDetailsWidget = ({ warranty }) => {
   return (
     <div className="flex w-full">
       <div className=" w-2/5 h-24 border-b-2 border-gray-100  text-xs pt-10 text-center">
-        0x21f7f174d21CA68a7a38e8291e4F21921FF6C049
+        {warranty.buyers[warranty.buyers.length - 1]}
       </div>
       <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center text-blue-700 justify-center items-center">
         {getStatus(warranty.status) === "Pending" && (
-          <button className="py-1 px-2 shadow-md bg-white text-xs rounded-md">
+          <button
+            className="py-1 px-2 shadow-md bg-white text-xs rounded-md"
+            onClick={() => {
+              handleClaimOnClick(
+                warranty.tokenId,
+                warranty.buyers[warranty.buyers.length - 1],
+                contract
+              );
+            }}
+          >
             Claim
           </button>
         )}

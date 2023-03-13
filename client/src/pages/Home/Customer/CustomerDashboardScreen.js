@@ -8,7 +8,10 @@ import PendingWarrantiesDetailsWidget from "../Seller/components/PendingWarranti
 import ActiveWarrantiesDetailsWidget from "../Seller/components/ActiveWarrantyStatusWidget";
 import ExpiredWarrantiesDetailsWidget from "../Seller/components/ExpiredWarrantyStatusWidget";
 import CustomerPendingWarrantiesDetailsWidget from "./components/CustomerPendingWarranties";
-import { getCustomerNfts } from "../../../apiCalls/Customer/customerApiCall";
+import {
+  get_All_CustomerNfts,
+  claim_And_MintNft,
+} from "../../../apiCalls/Customer/customerApiCall";
 
 function CustomerDashboard() {
   const dispatch = useDispatch();
@@ -33,8 +36,7 @@ function CustomerDashboard() {
 
   //Get All Seller Nfts
   const getnftsdetails = async () => {
-    console.log(user.id);
-    const nfts = await getCustomerNfts(user.id, contract);
+    const nfts = await get_All_CustomerNfts(user.id, contract);
     setNfts(nfts);
   };
 

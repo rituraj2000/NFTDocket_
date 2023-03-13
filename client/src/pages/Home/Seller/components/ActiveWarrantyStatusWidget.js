@@ -14,18 +14,16 @@ const ActiveWarrantiesDetailsWidget = ({ warranty }) => {
   return (
     <div className="flex w-full">
       <div className=" w-2/5 h-24 border-b-2 border-gray-100  text-xs pt-10 text-center">
-      {warranty.buyers[warranty.buyers.length - 1]}
+        {warranty.buyers[warranty.buyers.length - 1]}
       </div>
       <div className=" w-1/5 h-24 pt-10 border-b-2 border-r-2 border-l-2 border-gray-100 text-center text-blue-700">
         {getStatus(warranty.status)}
       </div>
       <div className=" w-2/5 h-24 pt-10 border-b-2 border-r-2  border-gray-100 text-center text-sm">
         {warranty.tokenId}
-        tokenId
       </div>
       <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center text-sm">
         {warranty.tokenId}
-        tokenId
       </div>
     </div>
   );
