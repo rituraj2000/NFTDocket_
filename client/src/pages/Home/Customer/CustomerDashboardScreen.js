@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import Web3 from "web3";
 import { SetUser } from "../../../redux/userSlice";
 import { contract } from "../../../web3_utils/contract";
-import PendingWarrantiesDetailsWidget from "../Seller/components/PendingWarrantiesDetails";
 import ActiveWarrantiesDetailsWidget from "../Seller/components/ActiveWarrantyStatusWidget";
 import ExpiredWarrantiesDetailsWidget from "../Seller/components/ExpiredWarrantyStatusWidget";
 import CustomerPendingWarrantiesDetailsWidget from "./components/CustomerPendingWarranties";
@@ -137,7 +136,7 @@ function CustomerDashboard() {
                   Token id
                 </div>
                 <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center">
-                  Token id
+                  Details
                 </div>
               </div>
             )}

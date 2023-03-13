@@ -5,5 +5,5 @@ const web3 = new Web3(window.ethereum);
 
 export const contract = new web3.eth.Contract(
   abi,
-  "0x0501aB63941C944b5ff1DE7711190527E584fE35"
+  "0x645A35Ee6ac825CcFE235e7b6c121ABF8920E4b9"
 );

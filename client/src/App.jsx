@@ -20,7 +20,10 @@ const App = () => {
           <Route path="/" element={<SellerDashboard />} />
           <Route path="/customerDashboard" element={<CustomerDashboard />} />
           <Route path="/create-nft" element={<CreateNFTScreen />} />
-          <Route path="/product-details" element={<ProductDetailsScreen />} />
+          <Route
+            path="/product-details/:tokenId"
+            element={<ProductDetailsScreen />}
+          />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/register" element={<Register />} />
           <Route path="/connectWallet" element={<ConnectToWallet />} />

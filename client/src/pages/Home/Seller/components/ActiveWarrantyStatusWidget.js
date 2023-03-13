@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 const getStatus = (statusNumber) => {
   if (statusNumber === "0") {
     return "Verified";
@@ -11,6 +13,8 @@ const getStatus = (statusNumber) => {
 };
 
 const ActiveWarrantiesDetailsWidget = ({ warranty }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="flex w-full">
       <div className=" w-2/5 h-24 border-b-2 border-gray-100  text-xs pt-10 text-center">
@@ -23,7 +27,15 @@ const ActiveWarrantiesDetailsWidget = ({ warranty }) => {
         {warranty.tokenId}
       </div>
       <div className=" w-2/5 h-24 pt-10 border-b-2 border-gray-100 text-center text-sm">
-        {warranty.tokenId}
+        <button
+          onClick={() => {
+            console.log("Clicked");
+            navigate(`/product-details/${warranty.tokenId}`);
+          }}
+          className="w-6 h-6 rounded-full shadow-lg bg-white"
+        >
+          !
+        </button>
       </div>
     </div>
   );
