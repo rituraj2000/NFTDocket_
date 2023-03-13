@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Web3 from "web3";
-import { abi } from "../../abi";
+import { abi } from "../../web3_utils/abi";
 import { contract } from "../../web3_utils/contract";
 
 const Register = () => {

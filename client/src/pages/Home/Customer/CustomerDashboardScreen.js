@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Web3 from "web3";
 import { SetUser } from "../../../redux/userSlice";
 import { contract } from "../../../web3_utils/contract";
-import { getSellerNfts } from "../../../apiCalls/Seller/sellerApiCall";
 import PendingWarrantiesDetailsWidget from "../Seller/components/PendingWarrantiesDetails";
 import ActiveWarrantiesDetailsWidget from "../Seller/components/ActiveWarrantyStatusWidget";
 import ExpiredWarrantiesDetailsWidget from "../Seller/components/ExpiredWarrantyStatusWidget";
 import CustomerPendingWarrantiesDetailsWidget from "./components/CustomerPendingWarranties";
+import { getCustomerNfts } from "../../../apiCalls/Customer/customerApiCall";
 
 function CustomerDashboard() {
   const dispatch = useDispatch();
@@ -33,7 +33,8 @@ function CustomerDashboard() {
 
   //Get All Seller Nfts
   const getnftsdetails = async () => {
-    const nfts = await getSellerNfts(user.id, contract);
+    console.log(user.id);
+    const nfts = await getCustomerNfts(user.id, contract);
     setNfts(nfts);
   };
 
@@ -142,21 +143,33 @@ function CustomerDashboard() {
             {/* Warranty Details*/}
             {nftStatus === "2" &&
               nfts &&
-              nfts.map((warranty) => (
-                <CustomerPendingWarrantiesDetailsWidget warranty={warranty} />
-              ))}
+              nfts.map((warranty) => {
+                return (
+                  warranty.status === "2" && (
+                    <CustomerPendingWarrantiesDetailsWidget
+                      warranty={warranty}
+                    />
+                  )
+                );
+              })}
 
             {nftStatus === "1" &&
               nfts &&
-              nfts.map((warranty) => (
-                <ActiveWarrantiesDetailsWidget warranty={warranty} />
-              ))}
+              nfts.map(
+                (warranty) =>
+                  warranty.status === "1" && (
+                    <ActiveWarrantiesDetailsWidget warranty={warranty} />
+                  )
+              )}
 
             {nftStatus === "3" &&
               nfts &&
-              nfts.map((warranty) => (
-                <ExpiredWarrantiesDetailsWidget warranty={warranty} />
-              ))}
+              nfts.map(
+                (warranty) =>
+                  warranty.status === "3" && (
+                    <ExpiredWarrantiesDetailsWidget warranty={warranty} />
+                  )
+              )}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SetUser } from "../../redux/userSlice";
-import { abi } from "../../abi";
+import { abi } from "../../web3_utils/abi";
 import { useNavigate } from "react-router-dom";
 import hand from "../../resources/hand.png";
 import Web3 from "web3";

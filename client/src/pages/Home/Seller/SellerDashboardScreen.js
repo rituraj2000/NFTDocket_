@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Web3 from "web3";
-import { abi } from "../../../abi";
+import { abi } from "../../../web3_utils/abi";
 import { SetUser } from "../../../redux/userSlice";
 import { contract } from "../../../web3_utils/contract";
 import { getSellerNfts } from "../../../apiCalls/Seller/sellerApiCall";
@@ -33,7 +33,7 @@ function SellerDashboard() {
   //Check for Registration
   const checkRegistrationStatus = async (user) => {
     const regStatus = await contract.methods.isSellerRegistered(user).call();
-    if (regStatus == false) {
+    if (regStatus === false) {
       navigate("/register");
       return;
     }
